@@ -56,6 +56,8 @@
             opacity: 0.7;
             cursor: not-allowed;
         }
+        .modal { display: none; }
+        .modal-active { display: flex; }
     </style>
 </head>
 <body class="text-gray-800">
@@ -247,7 +249,7 @@
 
     <script>
         // --- Gemini API Configuration ---
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=`;
+        const API_URL = '/.netlify/functions/gemini';
         
         // --- Utility Functions ---
         function formatNumber(element) {
@@ -347,9 +349,7 @@
         
         // --- Gemini API Functions ---
         async function callGemini(prompt) {
-             const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-             };
+             const payload = { prompt };
              try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
@@ -357,13 +357,14 @@
                     body: JSON.stringify(payload)
                 });
                 if (!response.ok) {
-                    throw new Error(`API call failed with status: ${response.status}`);
+                    const errorBody = await response.text();
+                    throw new Error(`API call failed with status: ${response.status}. Body: ${errorBody}`);
                 }
                 const data = await response.json();
                 return data.candidates[0].content.parts[0].text;
              } catch (error) {
                 console.error("Gemini API call failed:", error);
-                return `Error: Could not get a response. Please check your API Key and configuration. Details: ${error.message}`;
+                return `Error: Could not get a response. Details: ${error.message}`;
              }
         }
 
