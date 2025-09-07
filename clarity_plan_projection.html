@@ -119,8 +119,7 @@
                 <h1 class="text-xl font-bold text-gray-800">ClarityPlan</h1>
             </div>
             <div class="flex items-center space-x-4">
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-green-800">Dashboard</a>
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-green-800">Data Entry</a>
+                <a href="./clarity_plan_ui.html" class="text-sm font-medium text-gray-600 hover:text-green-800">Data Entry</a>
                 <span class="text-sm text-gray-600">Advisor: Jane Doe</span>
                 <img class="h-9 w-9 rounded-full" src="https://i.pravatar.cc/150?u=jane" alt="Advisor profile picture">
             </div>
@@ -606,19 +605,22 @@
             renderIncomeChart();
         }
         
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=`;
+        const API_URL = `/netlify/functions/gemini`;
         let currentInsights = {};
         let incomeChartData = [];
         
         async function callGemini(prompt) {
-             const payload = { contents: [{ parts: [{ text: prompt }] }] };
+             const payload = { prompt };
              try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                if (!response.ok) throw new Error(`API call failed with status: ${response.status}`);
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    throw new Error(`API call failed with status: ${response.status}. Body: ${errorBody}`);
+                }
                 const data = await response.json();
                 return JSON.parse(data.candidates[0].content.parts[0].text.replace(/```json|```/g, ''));
              } catch (error) {
@@ -851,5 +853,4 @@
     </script>
 </body>
 </html>
-
 
