@@ -177,7 +177,7 @@
 
                  <div class="space-y-4">
                     <label for="risk-tolerance" class="block text-sm font-medium text-gray-700">Investment Risk Level</label>
-                    <select id="risk-tolerance" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block p-2.5" onchange="updateProjection()">
+                    <select id="risk-tolerance" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block p-2.5" oninput="updateProjection()">
                         <option>Conservative</option>
                         <option selected>Moderate</option>
                         <option>Aggressive</option>
@@ -288,6 +288,36 @@
                     </div>
                 </div>
                 
+                <!-- NEW Sections: Portfolio Health & Recommended Age -->
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="font-semibold mb-4">Portfolio Health Check</h3>
+                    <div class="flex items-center space-x-4">
+                        <div id="health-status-badge" class="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full">Concentrated</div>
+                        <p id="health-summary" class="text-sm text-gray-600">The portfolio is heavily weighted towards certain assets, which may add risk.</p>
+                    </div>
+                    <div id="portfolio-breakdown" class="mt-4 space-y-3 text-sm">
+                        <!-- Bars will be updated by JS -->
+                    </div>
+                    <div id="portfolio-recommendation" class="mt-4 pt-4 border-t border-gray-200">
+                        <!-- AI Recommendation will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="font-semibold mb-2">Clarity's Recommendation</h3>
+                    <div class="flex items-center justify-around text-center">
+                        <div>
+                            <p class="text-sm text-gray-600">Recommended Age (David)</p>
+                            <p id="recommended-age-david" class="text-4xl font-bold text-green-800">67</p>
+                        </div>
+                         <div>
+                            <p class="text-sm text-gray-600">Recommended Age (Sarah)</p>
+                            <p id="recommended-age-sarah" class="text-4xl font-bold text-green-800">67</p>
+                        </div>
+                    </div>
+                    <p id="recommended-age-desc" class="text-xs text-center text-gray-500 mt-3">To achieve a 90% confidence score, a slightly delayed retirement significantly boosts the plan's resilience against market downturns.</p>
+                </div>
+
                 <!-- AI Insights and Timeline moved up -->
                 <div class="bg-white p-6 rounded-xl shadow-md">
                     <div class="flex items-center space-x-2 mb-4">
@@ -446,7 +476,6 @@
 
 
     <script>
-        // Store original probability to reset scenario
         let originalProbability = 78;
         let isScenarioActive = false;
         let pendingScenario = {};
@@ -612,7 +641,7 @@
             renderIncomeChart();
         }
         
-        const API_URL = 'https://scintillating-crisp-28342a.netlify.app/.netlify/functions/gemini';
+        const API_URL = '/.netlify/functions/gemini';
         let currentInsights = {};
         let incomeChartData = [];
         
@@ -893,6 +922,71 @@
                 timelineContainer.appendChild(item);
             });
         }
+        
+        async function renderPortfolioHealth() {
+            const container = document.getElementById('portfolio-breakdown');
+            const badge = document.getElementById('health-status-badge');
+            const summary = document.getElementById('health-summary');
+            const recommendationContainer = document.getElementById('portfolio-recommendation');
+            if(!container || !badge || !summary || !recommendationContainer) return;
+
+            const assets = [
+                { name: '401k & IRAs', value: 800000, color: 'bg-green-700' },
+                { name: 'Real Estate', value: 600000, color: 'bg-teal-500' },
+                { name: 'Taxable Investments', value: 450000, color: 'bg-green-500' },
+                { name: 'Crypto', value: 50000, color: 'bg-yellow-400' },
+                { name: 'Cash & Savings', value: 75000, color: 'bg-gray-400' }
+            ];
+
+            const totalAssets = assets.reduce((sum, asset) => sum + asset.value, 0);
+            container.innerHTML = '';
+            let isConcentrated = false;
+            let portfolioString = "";
+
+            assets.forEach(asset => {
+                const percentage = (asset.value / totalAssets) * 100;
+                if (percentage > 40) isConcentrated = true;
+                portfolioString += `${asset.name}: ${Math.round(percentage)}%, `;
+                const row = document.createElement('div');
+                row.innerHTML = `
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700">${asset.name}</span>
+                        <span class="text-sm font-medium text-gray-700">${Math.round(percentage)}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="${asset.color} h-2.5 rounded-full" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            recommendationContainer.innerHTML = `<p class="text-gray-500 text-sm">✨ Generating recommendation...</p>`;
+
+            if (isConcentrated) {
+                badge.className = 'bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full';
+                badge.textContent = 'Concentrated';
+                summary.textContent = 'The portfolio is heavily weighted towards certain assets, which may add risk.';
+                
+                const prompt = `A client's portfolio is concentrated. Breakdown: ${portfolioString}. Suggest one actionable talking point for the advisor to discuss diversification. Return a single short paragraph as a JSON object with a "recommendation" key.`;
+                const result = await callGemini(prompt);
+                recommendationContainer.innerHTML = `
+                     <div class="flex items-start">
+                        <div class="shrink-0">
+                            <svg class="h-5 w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-gray-600">${result.recommendation}</p>
+                        </div>
+                    </div>
+                `;
+
+            } else {
+                badge.className = 'bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full';
+                badge.textContent = 'Balanced';
+                summary.textContent = 'The current allocation appears to be well-diversified across different asset types.';
+                recommendationContainer.innerHTML = '';
+            }
+        }
 
         // Initial Load
         window.onload = () => {
@@ -901,6 +995,7 @@
              updateProjection();
              renderIncomeChart();
              renderStrategyTimeline();
+             renderPortfolioHealth();
              window.addEventListener('resize', renderIncomeChart);
         };
     </script>
