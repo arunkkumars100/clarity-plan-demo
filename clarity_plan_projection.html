@@ -601,9 +601,9 @@
             if(data.scenario) {
                 prompt += `This is a "what-if" scenario modeling a ${data.scenario.type}. Specifics: ${data.scenario.details}. Generate insights on how to navigate this specific event. `
             } else {
-                 prompt += `The projected legacy potential (net worth at age 95) is between $${data.legacyLower.toLocaleString()} and $${data.legacyUpper.toLocaleString()}. In a poor scenario (10th percentile), the plan can support an annual income of $${data.poorIncome.toLocaleString()}. The clients retire at age ${data.retirementAge} and Medicare begins at 65. The income plan relies on Social Security, then taxable withdrawals, then tax-deferred withdrawals. `
+                 prompt += `The projected legacy potential (net worth at age 95) is between $${data.legacyLower.toLocaleString()} and $${data.legacyUpper.toLocaleString()}. In a poor scenario (10th percentile), the plan can support an annual income of $${data.poorIncome.toLocaleString()}. The clients retire at age ${data.retirementAge} and Medicare begins at 65. The recommended strategy is to delay social security to age 70 and perform Roth conversions in the bridge years. `
             }
-            prompt += `Generate brief, actionable insights. Return a JSON object with four keys: "opportunities", "risks", "tax", and "withdrawal". Each key should have a short HTML string value (max 2 paragraphs, using <p> and <strong> tags). Specifically for the "withdrawal" key, explain the strategy, how to minimize taxes, and explicitly address how to manage medical expenses during the 'healthcare bridge' years before Medicare begins.`;
+            prompt += `Generate brief, actionable insights. Return a JSON object with four keys: "opportunities", "risks", "tax", and "withdrawal". Each key should have a short HTML string value (max 2 paragraphs, using <p> and <strong> tags). Specifically for the "withdrawal" key, explain the recommended strategy, how to minimize taxes, and explicitly address how to manage medical expenses during the 'healthcare bridge' years before Medicare begins.`;
             
             currentInsights = await callGemini(prompt);
             changeTab(document.querySelector('.insight-tab-active'), 'opportunities');
