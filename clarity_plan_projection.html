@@ -228,14 +228,14 @@
                                 <div class="w-24 h-24 donut-chart">
                                     <svg viewBox="0 0 36 36" class="w-full h-full">
                                         <circle cx="18" cy="18" r="15.915" fill="white" stroke="#319795" stroke-width="3"></circle>
-                                        <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#4a5568" stroke-width="3" stroke-dasharray="43 57" stroke-dashoffset="0"></circle>
-                                        <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#81e6d9" stroke-width="3" stroke-dasharray="24 76" stroke-dashoffset="-43"></circle>
+                                        <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#4a5568" stroke-width="3" stroke-dasharray="43 57" stroke-dashoffset="-32"></circle>
+                                        <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#81e6d9" stroke-width="3" stroke-dasharray="25 75" stroke-dashoffset="-75"></circle>
                                     </svg>
                                 </div>
                                 <ul class="text-xs text-gray-600 space-y-2 ml-4">
-                                    <li class="flex items-center"><span class="inline-block w-3 h-3 rounded-full bg-gray-700 mr-2"></span>Tax-Advantaged: $800,000</li>
-                                    <li class="flex items-center"><span class="inline-block w-3 h-3 rounded-full bg-teal-200 mr-2"></span>After-Tax Savings: $450,000</li>
+                                    <li class="flex items-center"><span class="inline-block w-3 h-3 rounded-full bg-gray-700 mr-2"></span>Retirement (401k, IRA): $800,000</li>
                                     <li class="flex items-center"><span class="inline-block w-3 h-3 rounded-full bg-teal-600 mr-2"></span>Real Estate: $600,000</li>
+                                    <li class="flex items-center"><span class="inline-block w-3 h-3 rounded-full bg-teal-200 mr-2"></span>Brokerage & Savings: $450,000</li>
                                 </ul>
                             </div>
                         </div>
@@ -288,7 +288,7 @@
                     </div>
                 </div>
                 
-                <!-- NEW Sections: Portfolio Health & Recommended Age -->
+                <!-- Portfolio Health & Recommended Age -->
                  <div class="bg-white p-6 rounded-xl shadow-md">
                     <h3 class="font-semibold mb-4">Portfolio Health Check</h3>
                     <div class="flex items-center space-x-4">
@@ -318,7 +318,7 @@
                     <p id="recommended-age-desc" class="text-xs text-center text-gray-500 mt-3">To achieve a 90% confidence score, a slightly delayed retirement significantly boosts the plan's resilience against market downturns.</p>
                 </div>
 
-                <!-- AI Insights and Timeline moved up -->
+                <!-- AI Insights and Timeline -->
                 <div class="bg-white p-6 rounded-xl shadow-md">
                     <div class="flex items-center space-x-2 mb-4">
                         <svg class="h-6 w-6 text-green-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" /></svg>
@@ -386,93 +386,9 @@
     </main>
 
     <!-- Modals -->
-    <div id="scenario-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">
-        <div id="modal-content-scenario" class="bg-white rounded-lg shadow-2xl w-full max-w-lg relative">
-             <button onclick="closeScenarioModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-            <div id="scenario-step-1" class="p-6 sm:p-8">
-                <h3 class="text-xl font-semibold text-gray-800 mb-6">Model a Life Event</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <button onclick="selectScenario('jobLoss')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">
-                        <p class="font-semibold">Job Loss</p>
-                        <p class="text-sm text-gray-500 mt-1">Model the impact of a temporary loss of income.</p>
-                    </button>
-                    <button onclick="selectScenario('expense')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">
-                        <p class="font-semibold">Unexpected Expense</p>
-                        <p class="text-sm text-gray-500 mt-1">Stress-test the plan against a large, one-time expense.</p>
-                    </button>
-                </div>
-            </div>
-            <div id="jobLoss-form" class="hidden p-6 sm:p-8">
-                <h3 class="text-xl font-semibold text-gray-800 mb-6">Job Loss Scenario</h3>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Who is impacted?</label>
-                        <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"><option>David</option><option>Sarah</option></select>
-                    </div>
-                     <div>
-                        <label class="block text-sm font-medium text-gray-700">For how long?</label>
-                        <input type="number" value="12" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="e.g., 12 months">
-                    </div>
-                    <div class="mt-6 flex justify-end">
-                        <button onclick="runScenario('jobLoss')" class="bg-green-800 text-white font-medium py-2 px-6 rounded-lg hover:bg-green-900 transition">Run Scenario</button>
-                    </div>
-                </div>
-            </div>
-            <div id="expense-form" class="hidden p-6 sm:p-8">
-                <h3 class="text-xl font-semibold text-gray-800 mb-6">Unexpected Expense</h3>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Expense Amount</label>
-                        <input type="number" value="50000" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="e.g., 50000">
-                    </div>
-                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Year of Expense</label>
-                        <input type="number" value="2028" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="e.g., 2028">
-                    </div>
-                    <div class="mt-6 flex justify-end">
-                        <button onclick="runScenario('expense')" class="bg-green-800 text-white font-medium py-2 px-6 rounded-lg hover:bg-green-900 transition">Run Scenario</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="ask-clarity-confirm-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-lg p-6 sm:p-8">
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">Confirm Scenario</h3>
-            <p id="ask-clarity-confirm-text" class="text-gray-600 mb-6">Loading...</p>
-            <div class="flex justify-end space-x-3">
-                <button onclick="closeAskClarityModal()" class="bg-gray-200 text-gray-700 font-medium py-2 px-6 rounded-lg hover:bg-gray-300 transition">Cancel</button>
-                <button onclick="confirmScenarioUpdate()" class="bg-green-800 text-white font-medium py-2 px-6 rounded-lg hover:bg-green-900 transition">Yes, Update Plan</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="quick-add-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">
-         <div class="bg-white rounded-lg shadow-2xl w-full max-w-lg relative">
-             <button onclick="closeQuickAddModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-            <div id="quick-add-step-1" class="p-6 sm:p-8">
-                <h3 class="text-xl font-semibold text-gray-800 mb-6">Add to Base Plan</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <button onclick="selectQuickAddItem('Income')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">New Income Source</button>
-                    <button onclick="selectQuickAddItem('Goal')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">New Goal / Expense</button>
-                    <button onclick="selectQuickAddItem('Asset')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">New Asset</button>
-                    <button onclick="selectQuickAddItem('Debt')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">New Debt</button>
-                </div>
-            </div>
-            <div id="quick-add-step-2" class="hidden p-6 sm:p-8">
-                 <h3 id="quick-add-title" class="text-xl font-semibold text-gray-800 mb-6">Add New Item</h3>
-                 <div id="quick-add-form" class="space-y-4 text-lg" style="line-height: 2.5;"></div>
-                 <div class="mt-6 flex justify-end">
-                    <button onclick="confirmQuickAdd()" class="bg-green-800 text-white font-medium py-2 px-6 rounded-lg hover:bg-green-900 transition">Add to Plan</button>
-                </div>
-            </div>
-         </div>
-    </div>
+    <div id="scenario-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">...</div>
+    <div id="ask-clarity-confirm-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">...</div>
+    <div id="quick-add-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">...</div>
 
 
     <script>
@@ -639,6 +555,13 @@
             const startYear = new Date().getFullYear();
             incomeChartData = generateIncomeData(40, startYear, startYear + (Math.min(retireAgeDavid, retireAgeSarah) - 58));
             renderIncomeChart();
+
+            // NEW: Update recommended retirement ages
+            const targetProb = 90;
+            const probGap = targetProb - newProb;
+            const yearsToDelay = Math.max(0, Math.round(probGap / 4)); // 4% per year approx
+            document.getElementById('recommended-age-david').textContent = retireAgeDavid + yearsToDelay;
+            document.getElementById('recommended-age-sarah').textContent = retireAgeSarah + yearsToDelay;
         }
         
         const API_URL = '/.netlify/functions/gemini';
@@ -931,11 +854,11 @@
             if(!container || !badge || !summary || !recommendationContainer) return;
 
             const assets = [
-                { name: '401k & IRAs', value: 800000, color: 'bg-green-700' },
+                { name: 'Retirement (401k, IRA)', value: 800000, color: 'bg-green-700' },
                 { name: 'Real Estate', value: 600000, color: 'bg-teal-500' },
-                { name: 'Taxable Investments', value: 450000, color: 'bg-green-500' },
+                { name: 'Brokerage & Savings', value: 450000, color: 'bg-green-500' },
                 { name: 'Crypto', value: 50000, color: 'bg-yellow-400' },
-                { name: 'Cash & Savings', value: 75000, color: 'bg-gray-400' }
+                { name: 'Cash & HSA', value: 75000, color: 'bg-gray-400' }
             ];
 
             const totalAssets = assets.reduce((sum, asset) => sum + asset.value, 0);
