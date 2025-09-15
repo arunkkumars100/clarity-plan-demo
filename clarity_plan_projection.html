@@ -570,7 +570,6 @@
             console.log("Simulating Gemini call for:", prompt);
             return new Promise(resolve => {
                 setTimeout(() => {
-                    // This function now handles multiple types of prompts
                     if (prompt.includes("portfolio is concentrated")) {
                          resolve({ recommendation: "The heavy concentration in real estate (over 30% of assets) could be a risk. Consider discussing strategies to diversify, potentially by reallocating a portion of the taxable investments into international stocks or bonds to reduce single-market exposure." });
                     } else if (prompt.includes("Return a JSON object with four keys")) {
