@@ -36,6 +36,10 @@ exports.handler = async function(event) {
 
     const payload = {
       contents: [{ parts: [{ text: prompt }] }],
+       // Add a generationConfig to ask for a JSON response
+      generationConfig: {
+          responseMimeType: "application/json",
+      }
     };
 
     const response = await fetch(API_URL, {
@@ -51,10 +55,14 @@ exports.handler = async function(event) {
       return { statusCode: response.status, headers, body: JSON.stringify(data) };
     }
     
+    // The response from Google is now guaranteed to be a JSON string.
+    // We pass it directly to the client.
+    const responseText = data.candidates[0].content.parts[0].text;
+    
     return {
       statusCode: 200,
       headers, // Add headers to the successful response
-      body: JSON.stringify(data)
+      body: responseText // The body is now a clean JSON string
     };
 
   } catch (error) {
