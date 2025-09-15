@@ -385,7 +385,7 @@
         </div>
     </main>
 
-    <!-- Modals -->
+    <!-- Modals (structure omitted for brevity) -->
     <div id="scenario-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">...</div>
     <div id="ask-clarity-confirm-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">...</div>
     <div id="quick-add-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">...</div>
@@ -395,6 +395,8 @@
         let originalProbability = 78;
         let isScenarioActive = false;
         let pendingScenario = {};
+        let currentInsights = {};
+        let incomeChartData = [];
         
         const scenarioModal = document.getElementById('scenario-modal');
         const scenarioStep1 = document.getElementById('scenario-step-1');
@@ -562,9 +564,6 @@
             document.getElementById('recommended-age-david').textContent = retireAgeDavid + yearsToDelay;
             document.getElementById('recommended-age-sarah').textContent = retireAgeSarah + yearsToDelay;
         }
-        
-        let currentInsights = {};
-        let incomeChartData = [];
         
         async function callGemini(prompt) {
             console.log("Simulating Gemini call for:", prompt);
