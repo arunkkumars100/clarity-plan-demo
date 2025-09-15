@@ -246,8 +246,7 @@
     </main>
 
     <script>
-        // --- Gemini API Configuration ---
-        const API_URL = 'https://scintillating-crisp-28342a.netlify.app/.netlify/functions/gemini';
+        // --- Gemini API is now simulated ---
         
         // --- Utility Functions ---
         function formatNumber(element) {
@@ -321,25 +320,22 @@
             }, 10);
         }
         
-        // --- Gemini API Functions ---
-        async function callGemini(prompt) {
-             const payload = { prompt };
-             try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!response.ok) {
-                    const errorBody = await response.text();
-                    throw new Error(`API call failed with status: ${response.status}. Body: ${errorBody}`);
-                }
-                const data = await response.json();
-                return data.candidates[0].content.parts[0].text;
-             } catch (error) {
-                console.error("Gemini API call failed:", error);
-                return `Error: Could not get a response. Details: ${error.message}`;
-             }
+        // --- SIMULATED Gemini API Functions ---
+        function callGemini(prompt) {
+            console.log("Simulating Gemini call with prompt:", prompt);
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    if (prompt.includes("suggest three specific, aspirational long-term goals")) {
+                        resolve(JSON.stringify([
+                            { "name": "a 3-month world cruise", "cost": "75,000", "year": "2038" },
+                            { "name": "funding a grandchild's education", "cost": "100,000", "year": "2040" },
+                            { "name": "starting a small charitable foundation", "cost": "250,000", "year": "2045" }
+                        ]));
+                    } else {
+                        resolve("Have you discussed the benefits of a Roth conversion to manage future tax liabilities while their income is lower in the 'bridge years' before RMDs begin?");
+                    }
+                }, 800); // Simulate network delay
+            });
         }
 
         async function generateGoalIdeas() {
@@ -361,12 +357,12 @@
             const clientAge = Math.abs(ageDate.getUTCFullYear() - 1970);
             const clientIncome = document.getElementById('client1-income').innerText;
 
-            const prompt = `You are a creative financial planning assistant. A client named ${clientName}, age ${clientAge} with an income of $${clientIncome}, is planning for retirement. Based on their profile, suggest three specific, aspirational long-term goals they might not have considered. For each goal, provide a name, a suggested cost, and a target year. Return the response as a JSON array of objects, where each object has "name", "cost", and "year" keys. Example: [{"name": "a 3-month world cruise", "cost": "75,000", "year": "2038"}]`;
+            const prompt = `You are a creative financial planning assistant. A client named ${clientName}, age ${clientAge} with an income of $${clientIncome}, is planning for retirement...`;
             
             const result = await callGemini(prompt);
             
             try {
-                const goals = JSON.parse(result.replace(/```json|```/g, ''));
+                const goals = JSON.parse(result);
                 goals.forEach(goal => {
                     const suggestionButton = document.createElement('button');
                     suggestionButton.className = "bg-gray-100 text-gray-700 text-sm py-2 px-3 rounded-lg hover:bg-gray-200 transition";
@@ -375,7 +371,7 @@
                     suggestionsContainer.appendChild(suggestionButton);
                 });
             } catch (e) {
-                 suggestionsContainer.innerHTML = `<p class="text-red-500 text-sm">Could not parse suggestions. Please try again.</p><p class="text-xs text-gray-400 mt-1">${result}</p>`;
+                 suggestionsContainer.innerHTML = `<p class="text-red-500 text-sm">Could not parse suggestions. Please try again.</p>`;
             }
 
             button.disabled = false;
@@ -387,7 +383,7 @@
             const container = document.getElementById('smart-prompt-container');
             container.innerHTML = `<div class="flex items-center"><svg class="animate-spin h-5 w-5 text-green-600 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <p class="text-green-700 text-sm">Analyzing plan for insights...</p></div>`;
 
-            const prompt = "You are an expert financial planning assistant reviewing a client's data. The clients are in their late 50s with high income and significant retirement savings. What is one specific, non-obvious planning opportunity or risk they should consider? Frame it as a helpful question for the advisor. Example: 'Have you discussed the benefits of a Roth conversion to manage future tax liabilities?'";
+            const prompt = "You are an expert financial planning assistant reviewing a client's data...";
             
             const result = await callGemini(prompt);
 
