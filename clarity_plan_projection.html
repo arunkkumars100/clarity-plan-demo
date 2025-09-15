@@ -580,7 +580,6 @@
                             withdrawal: "<p>The recommended withdrawal strategy is designed to minimize taxes throughout retirement.</p><ul><li><strong>Ages 65-70 (The Bridge):</strong> Fund living expenses from the <strong>taxable brokerage account</strong> first. For healthcare, use the <strong>HSA account</strong>, as these withdrawals are tax-free for qualified medical expenses. This creates a low-income window for Roth conversions.</li><li><strong>Ages 70-75:</strong> Once Social Security begins, it will cover a large portion of expenses. Supplement the rest with withdrawals from the <strong>taxable brokerage account</strong>.</li><li><strong>Ages 75+:</strong> After RMDs begin, take the required amount from the <strong>401(k)/IRA</strong>. If more funds are needed, draw from the tax-free <strong>Roth IRA</strong> last to allow it to grow for as long as possible.</li></ul>"
                         });
                     } else {
-                        // Default fallback for askClarity parsing
                         resolve({ eventType: 'unknown', eventName: 'Parsed Scenario', amount: 0, year: 2025 });
                     }
                 }, 800);
@@ -591,13 +590,7 @@
             const insightContentEl = document.getElementById('insight-content');
             insightContentEl.innerHTML = `<p class="text-gray-500">✨ Generating new insights...</p>`;
             
-            let prompt = `You are a critical financial planning analyst. A client's retirement plan has a ${data.probability}% success probability. `;
-            if(data.scenario) {
-                prompt += `This is a "what-if" scenario modeling a ${data.scenario.type}. Specifics: ${data.scenario.details}. Generate insights on how to navigate this specific event. `
-            } else {
-                 prompt += `The projected legacy potential (net worth at age 95) is between $${data.legacyLower.toLocaleString()} and $${data.legacyUpper.toLocaleString()}. In a poor scenario (10th percentile), the plan can support an annual income of $${data.poorIncome.toLocaleString()}. The clients retire at age ${data.retirementAge} and Medicare begins at 65. The recommended strategy is to delay social security to age 70 and perform Roth conversions in the bridge years. `
-            }
-            prompt += `Generate detailed, actionable insights...`;
+            let prompt = `You are a critical financial planning analyst...`;
             
             currentInsights = await callGemini(prompt);
             changeTab(document.querySelector('.insight-tab-active'), 'opportunities');
@@ -653,10 +646,7 @@
                 const y = height - (val / maxVal * height);
                 const label = val === 0 ? '$0' : `$${val/1000}k`;
                 if(y >= 0) {
-                    yAxis.innerHTML += `
-                        <text x="-5" y="${y + 3}" font-size="10" fill="#6b7280" text-anchor="end">${label}</text>
-                        <line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="#e5e7eb" stroke-dasharray="2 2"/>
-                    `;
+                    yAxis.innerHTML += `<text x="-5" y="${y + 3}" font-size="10" fill="#6b7280" text-anchor="end">${label}</text><line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="#e5e7eb" stroke-dasharray="2 2"/>`;
                 }
             }
             svg.appendChild(yAxis);
@@ -750,7 +740,7 @@
             const question = document.getElementById('clarity-question').value;
             if (!question) return;
 
-            const prompt = `You are an AI that parses financial planning scenarios. Analyze the following user query...`;
+            const prompt = `You are an AI that parses financial planning scenarios...`;
             
             const parsedScenario = await callGemini(prompt);
             
