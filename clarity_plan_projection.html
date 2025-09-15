@@ -386,9 +386,93 @@
     </main>
 
     <!-- Modals -->
-    <div id="scenario-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">...</div>
-    <div id="ask-clarity-confirm-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">...</div>
-    <div id="quick-add-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">...</div>
+    <div id="scenario-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">
+        <div id="modal-content-scenario" class="bg-white rounded-lg shadow-2xl w-full max-w-lg relative">
+             <button onclick="closeScenarioModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <div id="scenario-step-1" class="p-6 sm:p-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-6">Model a Life Event</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button onclick="selectScenario('jobLoss')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">
+                        <p class="font-semibold">Job Loss</p>
+                        <p class="text-sm text-gray-500 mt-1">Model the impact of a temporary loss of income.</p>
+                    </button>
+                    <button onclick="selectScenario('expense')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">
+                        <p class="font-semibold">Unexpected Expense</p>
+                        <p class="text-sm text-gray-500 mt-1">Stress-test the plan against a large, one-time expense.</p>
+                    </button>
+                </div>
+            </div>
+            <div id="jobLoss-form" class="hidden p-6 sm:p-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-6">Job Loss Scenario</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Who is impacted?</label>
+                        <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"><option>David</option><option>Sarah</option></select>
+                    </div>
+                     <div>
+                        <label class="block text-sm font-medium text-gray-700">For how long?</label>
+                        <input type="number" value="12" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="e.g., 12 months">
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <button onclick="runScenario('jobLoss')" class="bg-green-800 text-white font-medium py-2 px-6 rounded-lg hover:bg-green-900 transition">Run Scenario</button>
+                    </div>
+                </div>
+            </div>
+            <div id="expense-form" class="hidden p-6 sm:p-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-6">Unexpected Expense</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Expense Amount</label>
+                        <input type="number" value="50000" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="e.g., 50000">
+                    </div>
+                     <div>
+                        <label class="block text-sm font-medium text-gray-700">Year of Expense</label>
+                        <input type="number" value="2028" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="e.g., 2028">
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <button onclick="runScenario('expense')" class="bg-green-800 text-white font-medium py-2 px-6 rounded-lg hover:bg-green-900 transition">Run Scenario</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ask-clarity-confirm-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-lg p-6 sm:p-8">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Confirm Scenario</h3>
+            <p id="ask-clarity-confirm-text" class="text-gray-600 mb-6">Loading...</p>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeAskClarityModal()" class="bg-gray-200 text-gray-700 font-medium py-2 px-6 rounded-lg hover:bg-gray-300 transition">Cancel</button>
+                <button onclick="confirmScenarioUpdate()" class="bg-green-800 text-white font-medium py-2 px-6 rounded-lg hover:bg-green-900 transition">Yes, Update Plan</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="quick-add-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center p-4 z-50">
+         <div class="bg-white rounded-lg shadow-2xl w-full max-w-lg relative">
+             <button onclick="closeQuickAddModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <div id="quick-add-step-1" class="p-6 sm:p-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-6">Add to Base Plan</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button onclick="selectQuickAddItem('Income')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">New Income Source</button>
+                    <button onclick="selectQuickAddItem('Goal')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">New Goal / Expense</button>
+                    <button onclick="selectQuickAddItem('Asset')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">New Asset</button>
+                    <button onclick="selectQuickAddItem('Debt')" class="text-left p-4 border rounded-lg hover:bg-gray-100 hover:shadow-md transition">New Debt</button>
+                </div>
+            </div>
+            <div id="quick-add-step-2" class="hidden p-6 sm:p-8">
+                 <h3 id="quick-add-title" class="text-xl font-semibold text-gray-800 mb-6">Add New Item</h3>
+                 <div id="quick-add-form" class="space-y-4 text-lg" style="line-height: 2.5;"></div>
+                 <div class="mt-6 flex justify-end">
+                    <button onclick="confirmQuickAdd()" class="bg-green-800 text-white font-medium py-2 px-6 rounded-lg hover:bg-green-900 transition">Add to Plan</button>
+                </div>
+            </div>
+         </div>
+    </div>
 
 
     <script>
@@ -556,10 +640,9 @@
             incomeChartData = generateIncomeData(40, startYear, startYear + (Math.min(retireAgeDavid, retireAgeSarah) - 58));
             renderIncomeChart();
 
-            // NEW: Update recommended retirement ages
             const targetProb = 90;
             const probGap = targetProb - newProb;
-            const yearsToDelay = Math.max(0, Math.round(probGap / 4)); // 4% per year approx
+            const yearsToDelay = Math.max(0, Math.round(probGap / 4));
             document.getElementById('recommended-age-david').textContent = retireAgeDavid + yearsToDelay;
             document.getElementById('recommended-age-sarah').textContent = retireAgeSarah + yearsToDelay;
         }
@@ -597,13 +680,13 @@
             const insightContentEl = document.getElementById('insight-content');
             insightContentEl.innerHTML = `<p class="text-gray-500">✨ Generating new insights...</p>`;
             
-            let prompt = `You are a financial planning AI. A client's retirement plan has a ${data.probability}% success probability. `;
+            let prompt = `You are a critical financial planning analyst. A client's retirement plan has a ${data.probability}% success probability. `;
             if(data.scenario) {
                 prompt += `This is a "what-if" scenario modeling a ${data.scenario.type}. Specifics: ${data.scenario.details}. Generate insights on how to navigate this specific event. `
             } else {
                  prompt += `The projected legacy potential (net worth at age 95) is between $${data.legacyLower.toLocaleString()} and $${data.legacyUpper.toLocaleString()}. In a poor scenario (10th percentile), the plan can support an annual income of $${data.poorIncome.toLocaleString()}. The clients retire at age ${data.retirementAge} and Medicare begins at 65. The recommended strategy is to delay social security to age 70 and perform Roth conversions in the bridge years. `
             }
-            prompt += `Generate brief, actionable insights. Return a JSON object with four keys: "opportunities", "risks", "tax", and "withdrawal". Each key should have a short HTML string value (max 2 paragraphs, using <p> and <strong> tags). Specifically for the "withdrawal" key, explain the recommended strategy, how to minimize taxes, and explicitly address how to manage medical expenses during the 'healthcare bridge' years before Medicare begins.`;
+            prompt += `Generate detailed, actionable insights. Return a JSON object with four keys: "opportunities", "risks", "tax", and "withdrawal". The value for each key should be an HTML string. Use <strong> tags to highlight key terms and numbers. Use <ul> and <li> for bulleted recommendations. Specifically for the "withdrawal" key, provide a clear, bulleted, step-by-step withdrawal order for different life phases and explicitly address how to manage medical expenses during the 'healthcare bridge' years before Medicare begins.`;
             
             currentInsights = await callGemini(prompt);
             changeTab(document.querySelector('.insight-tab-active'), 'opportunities');
